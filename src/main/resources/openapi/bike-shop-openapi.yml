@@ -3,7 +3,7 @@ info:
   description: "Bike shop application"
   version: "1.0.0"
   title: "Bike shop"
-host: "petstore.swagger.io"
+host: "bikeshop.swagger.io"
 basePath: "/v2"
 tags:
   - name: "order"
@@ -11,13 +11,13 @@ schemes:
   - "https"
   - "http"
 paths:
-  /pet:
+  /order:
     post:
       tags:
-        - "pet"
-      summary: "Add a new pet to the store"
+        - "order"
+      summary: "Add a new order"
       description: ""
-      operationId: "addPet"
+      operationId: "addOrder"
       consumes:
         - "application/json"
         - "application/xml"
@@ -32,6 +32,10 @@ paths:
           schema:
             $ref: "#/definitions/Order"
       responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "string"
         "405":
           description: "Invalid input"
   /user/login:
@@ -98,7 +102,7 @@ definitions:
       total:
         type: "integer"
         format: "int32"
-      listProducts:
+      productList:
         type: "array"
         items:
           $ref: "#/definitions/Product"
@@ -132,8 +136,8 @@ definitions:
     type: "object"
     properties:
       id:
-        type: "integer"
-        format: "int64"
+        type: "string"
+        format: "uuid"
       name:
         type: "string"
       quantity:
