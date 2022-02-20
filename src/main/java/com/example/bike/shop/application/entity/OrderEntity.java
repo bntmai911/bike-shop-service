@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,6 +30,9 @@ public class OrderEntity {
     @Column(name = "total")
     private Long total;
 
-    //    @ManyToMany(mappedBy = "orderList")
+//    @OneToMany(mappedBy = "order")
 //    private List<ProductEntity> productList;
+
+    @ManyToMany(mappedBy = "orderList")
+    private List<ProductEntity> productList;
 }
