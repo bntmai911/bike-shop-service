@@ -1,9 +1,6 @@
 package com.example.bike.shop.application.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +8,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "product")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ProductEntity {
     @Id
@@ -26,10 +26,6 @@ public class ProductEntity {
 
     @Column(name = "price")
     private Long price;
-
-//    @ManyToOne
-//    @JoinColumn(name = "order_id")
-//    private OrderEntity order;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
