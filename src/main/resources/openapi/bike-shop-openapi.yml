@@ -11,6 +11,186 @@ schemes:
   - "https"
   - "http"
 paths:
+  /product:
+    post:
+      tags:
+        - "product"
+      summary: "Add a new product"
+      description: "Add a new product"
+      operationId: "addProduct"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "An product body that need to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        "201":
+          schema:
+            type: "string"
+            format: "uuid"
+          description: "successful operation"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: "Not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: "Internal Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      tags:
+        - "product"
+      summary: "Get all products"
+      description: "Get all products"
+      operationId: "getProducts"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "search"
+          description: "Query product by name"
+          type: string
+          required: true
+        - in: "query"
+          name: "sortBy"
+          description: "Sort product by field"
+          type: string
+          required: true
+        - in: "query"
+          name: "sortType"
+          description: "Sort product type"
+          type: string
+          required: true
+        - in: "query"
+          name: "page"
+          description: "Page number of product"
+          type: "integer"
+          format: "int64"
+          required: true
+        - in: "query"
+          name: "limit"
+          description: "Page size of product"
+          type: "integer"
+          format: "int64"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProductResponse"
+        "404":
+          description: "Not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: "Internal Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /product/{productId}:
+    get:
+      tags:
+        - "product"
+      summary: "Get an product by Id"
+      description: ""
+      operationId: "getProductById"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "productId"
+          description: "Id of an product"
+          type: string
+          format: "uuid"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ProductResponse"
+        "404":
+          description: "Not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: "Internal Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - "product"
+      summary: "Delete an product by Id"
+      description: "Delete an product by Id"
+      operationId: "deleteProductById"
+      parameters:
+        - in: "path"
+          name: "productId"
+          description: "Id of an product"
+          type: string
+          format: "uuid"
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+        "404":
+          description: "Not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: "Internal Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      tags:
+        - "product"
+      summary: "Update an product by Id"
+      description: "Update an product by Id"
+      operationId: "updateProductById"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "productId"
+          description: "Id of an product"
+          type: string
+          format: "uuid"
+          required: true
+        - in: "body"
+          name: "body"
+          description: "An product body that need to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        "200":
+          schema:
+            $ref: "#/definitions/Product"
+          description: "successful operation"
+        "400":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: "Not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "500":
+          description: "Internal Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /order:
     post:
       tags:
@@ -64,7 +244,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Order"
+              $ref: "#/definitions/OrderResponse"
         "404":
           description: "Not found"
           schema:
@@ -97,7 +277,7 @@ paths:
         "200":
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Order"
+            $ref: "#/definitions/OrderResponse"
         "404":
           description: "Not found"
           schema:
@@ -165,7 +345,7 @@ paths:
         "200":
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Order"
+            $ref: "#/definitions/OrderResponse"
         "400":
           description: "bad request"
           schema:
@@ -245,7 +425,28 @@ definitions:
       productList:
         type: "array"
         items:
-          $ref: "#/definitions/Product"
+          $ref: "#/definitions/ProductResponse"
+    xml:
+      name: "Order"
+  OrderResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      customerName:
+        type: "string"
+      customerPhoneNumber:
+        type: "string"
+      code:
+        type: "string"
+      total:
+        type: "integer"
+        format: "int32"
+      productList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProductResponse"
     xml:
       name: "Order"
   User:
@@ -275,6 +476,19 @@ definitions:
   Product:
     type: "object"
     properties:
+      name:
+        type: "string"
+      quantity:
+        type: "integer"
+        format: "int64"
+      price:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "Product"
+  ProductResponse:
+    type: "object"
+    properties:
       id:
         type: "string"
         format: "uuid"
@@ -287,7 +501,7 @@ definitions:
         type: "integer"
         format: "int64"
     xml:
-      name: "Product"
+      name: "ProductResponse"
   ErrorResponse:
     type: "object"
     properties:

@@ -1,9 +1,6 @@
 package com.example.bike.shop.application.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +8,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "customer_order")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class OrderEntity {
     @Id
@@ -29,9 +29,6 @@ public class OrderEntity {
 
     @Column(name = "total")
     private Long total;
-
-//    @OneToMany(mappedBy = "order")
-//    private List<ProductEntity> productList;
 
     @ManyToMany(mappedBy = "orderList")
     private List<ProductEntity> productList;
